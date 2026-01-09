@@ -10,7 +10,6 @@ class Employee:
     def get_role(self):
         return "Employee"
 
-
 class Manager(Employee):
     def __init__(self, salary, bonus):
         super().__init__(salary)
