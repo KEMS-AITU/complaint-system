@@ -6,6 +6,10 @@ from .permissions import IsAdmin
 
 # Create your views here.
 
+class RegisterView(generics.CreateAPIView):
+    serializer_class = UserRegisterSerializer
+    permission_classes = [permissions.AllowAny]
+
 
 # CLIENT
 class ComplaintCreateView(generics.CreateAPIView):
@@ -25,6 +29,9 @@ class ComplaintDetailView(generics.RetrieveAPIView):
 class FeedbackCreateView(generics.CreateAPIView):
     serializer_class = FeedbackSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 # ADMIN

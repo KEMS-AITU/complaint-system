@@ -1,0 +1,58 @@
+# --------------------
+# Python
+# --------------------
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --------------------
+# Virtual environments
+# --------------------
+venv/
+.venv/
+ENV/
+env/
+
+# --------------------
+# Django
+# --------------------
+db.sqlite3
+*.log
+local_settings.py
+media/
+staticfiles/
+
+# --------------------
+# Environment / secrets
+# --------------------
+.env
+.env.*
+*.env
+
+# --------------------
+# OS junk
+# --------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --------------------
+# IDEs / editors
+# --------------------
+.vscode/
+.idea/
+*.swp
+
+# --------------------
+# Node / frontend (если рядом есть React/Vite)
+# --------------------
+node_modules/
+dist/
+build/
+.vite/
+npm-debug.log*
