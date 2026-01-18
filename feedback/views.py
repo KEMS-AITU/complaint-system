@@ -17,7 +17,7 @@ class ComplaintListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        # возвращает только жалобы текущего пользователя
+        
         return Complaint.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
@@ -33,7 +33,7 @@ class ComplaintDetailView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        # клиент видит только свои жалобы
+        
         return Complaint.objects.filter(user=self.request.user)
 
 
