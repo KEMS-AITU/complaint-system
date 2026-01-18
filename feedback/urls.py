@@ -4,7 +4,7 @@ from .views import *
 urlpatterns = [
     path('auth/register/', RegisterView.as_view()),
     # client
-    path('complaints/', ComplaintCreateView.as_view()),
+    path('complaints/', ComplaintListCreateView.as_view()),  # GET + POST
     path('complaints/<int:pk>/', ComplaintDetailView.as_view()),
     path('feedback/', FeedbackCreateView.as_view()),
 
