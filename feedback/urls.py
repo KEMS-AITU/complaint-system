@@ -2,6 +2,7 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
+    path('auth/register/', RegisterView.as_view()),
     # client
     path('complaints/', ComplaintListCreateView.as_view()),  # GET + POST
     path('complaints/<int:pk>/', ComplaintDetailView.as_view()),

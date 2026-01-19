@@ -8,16 +8,21 @@ from .permissions import IsAdmin
 # CLIENT VIEWS
 # -----------------
 
+
+class RegisterView(generics.CreateAPIView):
+    serializer_class = UserRegisterSerializer
+    permission_classes = [permissions.AllowAny]
+
+
 class ComplaintListCreateView(generics.ListCreateAPIView):
     """
-    GET → список своих жалоб клиента
-    POST → создание новой жалобы
+    GET -> list the authenticated client's complaints
+    POST -> create a new complaint
     """
     serializer_class = ComplaintSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        
         return Complaint.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
@@ -26,14 +31,13 @@ class ComplaintListCreateView(generics.ListCreateAPIView):
 
 class ComplaintDetailView(generics.RetrieveAPIView):
     """
-    GET → детали конкретной жалобы клиента
+    GET -> details of a specific client complaint
     """
     queryset = Complaint.objects.all()
     serializer_class = ComplaintSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        
         return Complaint.objects.filter(user=self.request.user)
 
 
@@ -48,6 +52,7 @@ class FeedbackCreateView(generics.CreateAPIView):
 # -----------------
 # ADMIN VIEWS
 # -----------------
+
 
 class ComplaintListAdminView(generics.ListAPIView):
     queryset = Complaint.objects.all()
