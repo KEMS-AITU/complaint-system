@@ -3,7 +3,7 @@ from .views import *
 
 urlpatterns = [
     # client
-    path('complaints/', ComplaintCreateView.as_view()),
+    path('complaints/', ComplaintListCreateView.as_view()),  # GET + POST
     path('complaints/<int:pk>/', ComplaintDetailView.as_view()),
     path('feedback/', FeedbackCreateView.as_view()),
 
