@@ -1,12 +1,19 @@
-# views.py
 from rest_framework import generics, permissions
-from .models import *
-from .serializers import *
+from .models import (
+    User,
+    Complaint,
+    Feedback,
+    AdminResponse,
+    ComplaintHistory
+)
+from .serializers import (
+    ComplaintSerializer,
+    FeedbackSerializer,
+    AdminResponseSerializer,
+    ComplaintHistorySerializer,
+    UserRegisterSerializer
+)
 from .permissions import IsAdmin
-
-# -----------------
-# CLIENT VIEWS
-# -----------------
 
 
 class RegisterView(generics.CreateAPIView):
@@ -15,10 +22,6 @@ class RegisterView(generics.CreateAPIView):
 
 
 class ComplaintListCreateView(generics.ListCreateAPIView):
-    """
-    GET -> list the authenticated client's complaints
-    POST -> create a new complaint
-    """
     serializer_class = ComplaintSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -26,14 +29,17 @@ class ComplaintListCreateView(generics.ListCreateAPIView):
         return Complaint.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        complaint = serializer.save(user=self.request.user)
+
+        ComplaintHistory.objects.create(
+            complaint=complaint,
+            user=self.request.user,
+            action='CREATED',
+            new_status=complaint.status
+        )
 
 
 class ComplaintDetailView(generics.RetrieveAPIView):
-    """
-    GET -> details of a specific client complaint
-    """
-    queryset = Complaint.objects.all()
     serializer_class = ComplaintSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -46,12 +52,25 @@ class FeedbackCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        feedback = serializer.save(user=self.request.user)
+
+        ComplaintHistory.objects.create(
+            complaint=feedback.complaint,
+            user=self.request.user,
+            action='FEEDBACK',
+            comment=feedback.comment
+        )
 
 
-# -----------------
-# ADMIN VIEWS
-# -----------------
+class ComplaintHistoryView(generics.ListAPIView):
+    serializer_class = ComplaintHistorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return ComplaintHistory.objects.filter(
+            complaint_id=self.kwargs['pk'],
+            complaint__user=self.request.user
+        ).order_by('created_at')
 
 
 class ComplaintListAdminView(generics.ListAPIView):
@@ -65,10 +84,30 @@ class ComplaintStatusUpdateView(generics.UpdateAPIView):
     serializer_class = ComplaintSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
+    def perform_update(self, serializer):
+        old_status = self.get_object().status
+        complaint = serializer.save()
+
+        if old_status != complaint.status:
+            ComplaintHistory.objects.create(
+                complaint=complaint,
+                user=self.request.user,
+                action='STATUS_CHANGED',
+                old_status=old_status,
+                new_status=complaint.status
+            )
+
 
 class AdminResponseCreateView(generics.CreateAPIView):
     serializer_class = AdminResponseSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdmin]
 
     def perform_create(self, serializer):
-        serializer.save(admin=self.request.user)
+        admin_response = serializer.save(admin=self.request.user)
+
+        ComplaintHistory.objects.create(
+            complaint=admin_response.complaint,
+            user=self.request.user,
+            action='ADMIN_RESPONSE',
+            comment=admin_response.response_text
+        )

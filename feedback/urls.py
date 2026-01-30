@@ -12,4 +12,9 @@ urlpatterns = [
     path('admin/complaints/', ComplaintListAdminView.as_view()),
     path('admin/complaints/<int:pk>/status/', ComplaintStatusUpdateView.as_view()),
     path('admin/response/', AdminResponseCreateView.as_view()),
+    path(
+    'complaints/<int:pk>/history/',
+    ComplaintHistoryView.as_view()
+),
+
 ]

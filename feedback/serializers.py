@@ -9,7 +9,7 @@ class ComplaintSerializer(serializers.ModelSerializer):
     class Meta:
         model = Complaint
         fields = '__all__'
-        read_only_fields = ['id', 'user', 'status', 'created_at']
+        read_only_fields = ['id', 'user', 'created_at']
 
 
 class AdminResponseSerializer(serializers.ModelSerializer):
@@ -30,7 +30,15 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name', 'role']
+        fields = [
+            'id',
+            'username',
+            'password',
+            'email',
+            'first_name',
+            'last_name',
+            'role'
+        ]
 
     def create(self, validated_data):
         password = validated_data.pop('password')
@@ -38,3 +46,9 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+
+class ComplaintHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ComplaintHistory
+        fields = '__all__'
