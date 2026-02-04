@@ -123,6 +123,30 @@ const en: Messages = {
   'admin.noComplaints': 'No complaints yet.',
   'admin.page.title': 'Staff workspace',
   'admin.page.description': 'Review all complaints, update status, and send official responses.',
+  'nav.account': 'Account',
+  'account.page.title': 'Account',
+  'account.page.description': 'Manage your profile details and avatar.',
+  'account.section.personal.title': 'Personal information',
+  'account.section.personal.description': 'Update your name, email, and username.',
+  'account.field.firstName': 'First name',
+  'account.field.lastName': 'Last name',
+  'account.field.email': 'Email',
+  'account.field.username': 'Username / ID',
+  'account.save.idle': 'Save changes',
+  'account.save.saving': 'Saving...',
+  'account.avatar.upload': 'Upload new photo',
+  'account.avatar.uploading': 'Uploading...',
+  'account.avatar.hint': 'PNG/JPG up to 5MB.',
+  'account.label.user': 'User',
+  'account.label.noEmail': 'No email on file.',
+  'account.role.admin': 'Admin',
+  'account.role.client': 'Client',
+  'account.role.superuser': 'Superuser',
+  'account.error.load': 'Could not load account details.',
+  'account.error.save': 'Could not save changes.',
+  'account.error.avatar': 'Avatar upload failed.',
+  'account.success.saved': 'Profile updated.',
+  'account.success.avatar': 'Avatar updated.',
 };
 
 const ru: Messages = {
@@ -248,6 +272,30 @@ const ru: Messages = {
   'admin.noComplaints': 'Пока жалоб нет.',
   'admin.page.title': 'Рабочее пространство сотрудников',
   'admin.page.description': 'Просматривайте жалобы, обновляйте статусы и отправляйте официальные ответы.',
+  'nav.account': 'РђРєРєР°СѓРЅС‚',
+  'account.page.title': 'РђРєРєР°СѓРЅС‚',
+  'account.page.description': 'РЈРїСЂР°РІР»СЏР№С‚Рµ РїСЂРѕС„РёР»РµРј Рё Р°РІР°С‚Р°СЂРѕРј.',
+  'account.section.personal.title': 'Р›РёС‡РЅС‹Рµ РґР°РЅРЅС‹Рµ',
+  'account.section.personal.description': 'РћР±РЅРѕРІРёС‚Рµ РёРјСЏ, email Рё username.',
+  'account.field.firstName': 'РРјСЏ',
+  'account.field.lastName': 'Р¤Р°РјРёР»РёСЏ',
+  'account.field.email': 'Email',
+  'account.field.username': 'Username / ID',
+  'account.save.idle': 'РЎРѕС…СЂР°РЅРёС‚СЊ',
+  'account.save.saving': 'РЎРѕС…СЂР°РЅРµРЅРёРµ...',
+  'account.avatar.upload': 'Р—Р°РіСЂСѓР·РёС‚СЊ С„РѕС‚Рѕ',
+  'account.avatar.uploading': 'Р—Р°РіСЂСѓР·РєР°...',
+  'account.avatar.hint': 'PNG/JPG РґРѕ 5MB.',
+  'account.label.user': 'РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ',
+  'account.label.noEmail': 'Email РЅРµ СѓРєР°Р·Р°РЅ.',
+  'account.role.admin': 'РђРґРјРёРЅ',
+  'account.role.client': 'РљР»РёРµРЅС‚',
+  'account.role.superuser': 'Superuser',
+  'account.error.load': 'РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ РїСЂРѕС„РёР»СЊ.',
+  'account.error.save': 'РќРµ СѓРґР°Р»РѕСЃСЊ СЃРѕС…СЂР°РЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ.',
+  'account.error.avatar': 'РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ Р°РІР°С‚Р°СЂ.',
+  'account.success.saved': 'РџСЂРѕС„РёР»СЊ РѕР±РЅРѕРІР»С‘РЅ.',
+  'account.success.avatar': 'РђРІР°С‚Р°СЂ РѕР±РЅРѕРІР»С‘РЅ.',
 };
 
 const dictionaries = {
@@ -263,4 +311,3 @@ export const useTranslation = () => {
 
   return { t, language };
 };
-

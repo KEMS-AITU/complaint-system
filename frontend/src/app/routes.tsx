@@ -5,6 +5,7 @@ import { MyComplaintsPage } from '../pages/MyComplaintsPage';
 import { ComplaintDetailPage } from '../pages/ComplaintDetailPage';
 import { TrackComplaintPage } from '../pages/TrackComplaintPage';
 import { FeedbackPage } from '../pages/FeedbackPage';
+import { AccountPage } from '../pages/AccountPage';
 import { RequireAuth } from './RequireAuth';
 
 export const routes: RouteObject[] = [
@@ -14,4 +15,5 @@ export const routes: RouteObject[] = [
   { path: 'complaints/:id', element: <RequireAuth><ComplaintDetailPage /></RequireAuth> },
   { path: 'track', element: <RequireAuth><TrackComplaintPage /></RequireAuth> },
   { path: 'feedback', element: <RequireAuth><FeedbackPage /></RequireAuth> },
+  { path: 'account', element: <RequireAuth><AccountPage /></RequireAuth> },
 ];

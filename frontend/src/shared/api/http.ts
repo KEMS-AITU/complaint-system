@@ -52,8 +52,9 @@ const formatError = (payload: unknown, fallback: string) => {
 export const apiRequest = async <T>(path: string, options: RequestOptions = {}) => {
   const url = buildUrl(path);
   const headers: HeadersInit = {};
+  const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
 
-  if (options.body !== undefined) {
+  if (options.body !== undefined && !isFormData) {
     headers['Content-Type'] = 'application/json';
   }
   if (options.token) {
@@ -64,7 +65,12 @@ export const apiRequest = async <T>(path: string, options: RequestOptions = {}) 
     const res = await fetch(url, {
       method: options.method ?? 'GET',
       headers,
-      body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
+      body:
+        options.body !== undefined
+          ? isFormData
+            ? (options.body as FormData)
+            : JSON.stringify(options.body)
+          : undefined,
     });
     const payload = await parsePayload(res);
 

@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from .models import (
     User,
     Complaint,
@@ -11,7 +12,8 @@ from .serializers import (
     FeedbackSerializer,
     AdminResponseSerializer,
     ComplaintHistorySerializer,
-    UserRegisterSerializer
+    UserRegisterSerializer,
+    UserProfileSerializer,
 )
 from .permissions import IsAdmin
 
@@ -19,6 +21,18 @@ from .permissions import IsAdmin
 class RegisterView(generics.CreateAPIView):
     serializer_class = UserRegisterSerializer
     permission_classes = [permissions.AllowAny]
+
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
+
+    def get_object(self):
+        return self.request.user
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 
 class ComplaintListCreateView(generics.ListCreateAPIView):

@@ -2,6 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../../shared/auth/AuthContext';
 import { Button } from '../../shared/ui/Button';
 import { useTranslation } from '../../shared/lang/translations';
+import { TopBar } from '../../shared/layout/TopBar';
 
 export const AppLayout = () => {
   const { token, isAdmin, userIdentifier, clearToken } = useAuth();
@@ -70,13 +71,7 @@ export const AppLayout = () => {
           </div>
         </aside>
         <main className="content">
-          <header className="topbar">
-            <div>
-              <p className="eyebrow">{t('app.name')}</p>
-              <h1>{t('app.tagline')}</h1>
-            </div>
-            <div className="topbar-chip">{t('app.chip')}</div>
-          </header>
+          <TopBar />
           <div className="page">
             <Outlet />
           </div>

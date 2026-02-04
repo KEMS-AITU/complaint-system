@@ -8,6 +8,7 @@ class User(AbstractUser):
         ('ADMIN', 'Admin'),
     )
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='CLIENT')
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
 
 
 class Category(models.Model):

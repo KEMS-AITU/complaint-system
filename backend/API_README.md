@@ -17,6 +17,11 @@ Auth:
     - Get an auth token.
     - Request fields: `username`, `password`.
     - Response: `{"token": "<token>"}`
+  - `GET /api/auth/me/`
+    - Get the current user's profile.
+  - `PATCH /api/auth/me/`
+    - Update profile fields (`first_name`, `last_name`, `email`, `username`).
+    - Upload an avatar with `multipart/form-data` (`avatar` file field).
   - Example `fetch` (login + call an endpoint):
     ```javascript
     // Login and get token
