@@ -1,1 +1,1 @@
-web: gunicorn myproject.wsgi --bind 0.0.0.0:$PORT
+web: gunicorn complaint_system.wsgi --bind 0.0.0.0:$PORT
