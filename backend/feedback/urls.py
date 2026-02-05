@@ -1,0 +1,21 @@
+from django.urls import path
+from .views import *
+
+urlpatterns = [
+    path('auth/register/', RegisterView.as_view()),
+    path('auth/me/', UserProfileView.as_view()),
+    # client
+    path('complaints/', ComplaintListCreateView.as_view()),  # GET + POST
+    path('complaints/<int:pk>/', ComplaintDetailView.as_view()),
+    path('feedback/', FeedbackCreateView.as_view()),
+
+    # admin
+    path('admin/complaints/', ComplaintListAdminView.as_view()),
+    path('admin/complaints/<int:pk>/status/', ComplaintStatusUpdateView.as_view()),
+    path('admin/response/', AdminResponseCreateView.as_view()),
+    path(
+    'complaints/<int:pk>/history/',
+    ComplaintHistoryView.as_view()
+),
+
+]
