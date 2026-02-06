@@ -79,10 +79,16 @@ WSGI_APPLICATION = 'complaint_system.wsgi.application'
 RAILWAY_ENV = os.environ.get("RAILWAY_ENV", "development")
 
 
-DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get("DATABASE_URL"))
-}
 
+# Локальная база SQLite
+default_sqlite = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'db.sqlite3',
+}
+# На продакшн PostgreSQL через DATABASE_URL
+DATABASES = {
+    'default': dj_database_url.config(default=os.environ.get("DATABASE_URL")) or default_sqlite
+}
 
 
 AUTH_PASSWORD_VALIDATORS = [
