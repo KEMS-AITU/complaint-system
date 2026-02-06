@@ -29,9 +29,8 @@ ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "https://complaint-system-ewe4.vercel.app/",
+    "https://complaint-system-ewe4.vercel.app",
 ]
-
 
 
 INSTALLED_APPS = [
