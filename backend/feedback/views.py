@@ -70,6 +70,19 @@ class FeedbackCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         feedback = serializer.save(user=self.request.user)
+        complaint = feedback.complaint
+
+        if feedback.is_accepted and complaint.status != 'CLOSED':
+            old_status = complaint.status
+            complaint.status = 'CLOSED'
+            complaint.save(update_fields=['status'])
+            ComplaintHistory.objects.create(
+                complaint=complaint,
+                user=self.request.user,
+                action='STATUS_CHANGED',
+                old_status=old_status,
+                new_status=complaint.status
+            )
 
         ComplaintHistory.objects.create(
             complaint=feedback.complaint,
@@ -121,6 +134,19 @@ class AdminResponseCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         admin_response = serializer.save(admin=self.request.user)
+        complaint = admin_response.complaint
+
+        if complaint.status != 'RESOLVED':
+            old_status = complaint.status
+            complaint.status = 'RESOLVED'
+            complaint.save(update_fields=['status'])
+            ComplaintHistory.objects.create(
+                complaint=complaint,
+                user=self.request.user,
+                action='STATUS_CHANGED',
+                old_status=old_status,
+                new_status=complaint.status
+            )
 
         ComplaintHistory.objects.create(
             complaint=admin_response.complaint,

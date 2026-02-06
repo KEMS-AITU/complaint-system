@@ -85,6 +85,17 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class ComplaintHistorySerializer(serializers.ModelSerializer):
+    user_role = serializers.SerializerMethodField()
+
     class Meta:
         model = ComplaintHistory
         fields = '__all__'
+
+    def get_user_role(self, obj):
+        user = obj.user
+        if not user:
+            return None
+        if getattr(user, 'is_superuser', False) or getattr(user, 'is_staff', False):
+            return 'ADMIN'
+        role = getattr(user, 'role', None)
+        return role or 'CLIENT'

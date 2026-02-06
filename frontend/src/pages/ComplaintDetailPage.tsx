@@ -42,7 +42,7 @@ const statusVariant = (status: string) => {
   }
 };
 
-const actionLabel = (action: ComplaintHistory['action']) => {
+const actionLabel = (action: ComplaintHistory['action'], role?: ComplaintHistory['user_role']) => {
   switch (action) {
     case 'CREATED':
       return 'Complaint submitted';
@@ -51,7 +51,7 @@ const actionLabel = (action: ComplaintHistory['action']) => {
     case 'ADMIN_RESPONSE':
       return 'Admin response';
     case 'FEEDBACK':
-      return 'Client feedback';
+      return role === 'ADMIN' ? 'Admin feedback' : 'Client feedback';
     default:
       return action;
   }
@@ -163,7 +163,7 @@ export const ComplaintDetailPage = () => {
                   {history.map((item) => (
                     <li key={item.id}>
                       <div>
-                        <strong>{actionLabel(item.action)}</strong> —{' '}
+                        <strong>{actionLabel(item.action, item.user_role)}</strong> —{' '}
                         {new Date(item.created_at).toLocaleString()}
                       </div>
                       {item.old_status && item.new_status ? (

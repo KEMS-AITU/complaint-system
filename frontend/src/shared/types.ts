@@ -38,6 +38,7 @@ export type ComplaintHistory = {
   id: number;
   complaint: number;
   user: number | null;
+  user_role?: 'ADMIN' | 'CLIENT' | null;
   action: 'CREATED' | 'STATUS_CHANGED' | 'ADMIN_RESPONSE' | 'FEEDBACK';
   old_status: ComplaintStatus | null;
   new_status: ComplaintStatus | null;
