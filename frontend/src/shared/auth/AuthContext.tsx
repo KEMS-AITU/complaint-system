@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { apiRequest } from '../api/http';
+import { API_BASE_URL } from '../api/config';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { getProfile } from '../../features/account/accountApi';
 
@@ -10,8 +11,15 @@ type AuthContextValue = {
   userName: string;
   userEmail: string;
   userId: string;
+  userAvatarUrl: string;
   setToken: (token: string) => void;
   setUserIdentifier: (value: string) => void;
+  setUserProfile: (profile: {
+    name?: string;
+    email?: string;
+    id?: string;
+    avatarUrl?: string;
+  }) => void;
   clearToken: () => void;
 };
 
@@ -27,10 +35,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [userName, setUserName] = useLocalStorage('complaint_user_name', '');
   const [userEmail, setUserEmail] = useLocalStorage('complaint_user_email', '');
   const [userId, setUserId] = useLocalStorage('complaint_user_id', '');
+  const [userAvatarUrl, setUserAvatarUrl] = useLocalStorage('complaint_user_avatar', '');
   const isAdmin = isAdminValue === 'true';
+
+  const buildMediaUrl = (path?: string | null) => {
+    if (!path) return '';
+    if (path.startsWith('http://') || path.startsWith('https://')) return path;
+    const base = API_BASE_URL.replace(/\/api\/?$/, '');
+    return `${base}${path.startsWith('/') ? '' : '/'}${path}`;
+  };
 
   const setToken = (value: string) => setTokenValue(value);
   const setUserIdentifier = (value: string) => setUserIdentifierValue(value);
+  const setUserProfile = (profile: {
+    name?: string;
+    email?: string;
+    id?: string;
+    avatarUrl?: string;
+  }) => {
+    if (profile.name !== undefined) setUserName(profile.name);
+    if (profile.email !== undefined) setUserEmail(profile.email);
+    if (profile.id !== undefined) setUserId(profile.id);
+    if (profile.avatarUrl !== undefined) setUserAvatarUrl(profile.avatarUrl);
+  };
   const clearToken = () => {
     setTokenValue('');
     setIsAdminValue('false');
@@ -38,6 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUserName('');
     setUserEmail('');
     setUserId('');
+    setUserAvatarUrl('');
   };
 
   useEffect(() => {
@@ -46,6 +74,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUserName('');
       setUserEmail('');
       setUserId('');
+      setUserAvatarUrl('');
       return;
     }
 
@@ -74,12 +103,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUserName(name || result.data.username || '');
       setUserEmail(result.data.email || '');
       setUserId(result.data.id ? String(result.data.id) : '');
+      setUserAvatarUrl(buildMediaUrl(result.data.avatar_url || result.data.avatar || ''));
     };
     loadProfile();
     return () => {
       active = false;
     };
-  }, [token, setUserName, setUserEmail, setUserId]);
+  }, [token, setUserName, setUserEmail, setUserId, setUserAvatarUrl]);
 
   return (
     <AuthContext.Provider
@@ -90,8 +120,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         userName,
         userEmail,
         userId,
+        userAvatarUrl,
         setToken,
         setUserIdentifier,
+        setUserProfile,
         clearToken,
       }}
     >

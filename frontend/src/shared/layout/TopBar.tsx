@@ -15,12 +15,12 @@ const getInitials = (value: string) => {
 };
 
 export const TopBar = () => {
-  const { token, userIdentifier, clearToken } = useAuth();
+  const { token, userIdentifier, userName, userEmail, userId, userAvatarUrl, clearToken } = useAuth();
   const { language, setLanguage } = useLanguage();
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const displayName = userIdentifier || (token ? 'Signed in' : 'Guest');
+  const displayName = userName || userEmail || userIdentifier || userId || (token ? 'Signed in' : 'Guest');
   const initials = useMemo(() => getInitials(displayName), [displayName]);
   const isDarkTheme = theme === 'dark';
 
@@ -77,7 +77,9 @@ export const TopBar = () => {
             aria-haspopup="menu"
             aria-expanded={menuOpen}
           >
-            <span className="user-initials">{initials}</span>
+            <span className="user-initials">
+              {userAvatarUrl ? <img src={userAvatarUrl} alt={displayName} /> : initials}
+            </span>
             <span className="user-name">{displayName}</span>
             <span className="user-chevron" aria-hidden="true">
               <svg viewBox="0 0 24 24">

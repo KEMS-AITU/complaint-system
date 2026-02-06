@@ -1,5 +1,5 @@
 import { apiRequest } from './http';
-import type { Complaint } from '../types';
+import type { Complaint, ComplaintHistory } from '../types';
 
 export type ComplaintListParams = {
   search?: string;
@@ -43,6 +43,13 @@ export const listComplaints = (params: ComplaintListParams, token: string) => {
 
 export const getComplaint = (id: number | string, token: string) => {
   return apiRequest<Complaint>(`complaints/${id}/`, {
+    method: 'GET',
+    token,
+  });
+};
+
+export const getComplaintHistory = (id: number | string, token: string) => {
+  return apiRequest<ComplaintHistory[]>(`complaints/${id}/history/`, {
     method: 'GET',
     token,
   });

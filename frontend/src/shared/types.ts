@@ -33,3 +33,14 @@ export type AdminResponse = {
   response_text: string;
   created_at: string;
 };
+
+export type ComplaintHistory = {
+  id: number;
+  complaint: number;
+  user: number | null;
+  action: 'CREATED' | 'STATUS_CHANGED' | 'ADMIN_RESPONSE' | 'FEEDBACK';
+  old_status: ComplaintStatus | null;
+  new_status: ComplaintStatus | null;
+  comment: string;
+  created_at: string;
+};
