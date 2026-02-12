@@ -40,7 +40,7 @@ BACKEND_PID=$!
 # Frontend setup
 # ----------------------------
 echo "=== Frontend: installing dependencies ==="
-cd ../complaint-system-fe
+cd ../frontend
 npm install
 
 echo "=== Frontend: starting dev server on http://localhost:5173 ==="
