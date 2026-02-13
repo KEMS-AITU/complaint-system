@@ -23,7 +23,7 @@ pip install -r requirements.txt --quiet
 
 python manage.py migrate
 # Use 0.0.0.0 to match your production binding style
-python manage.py runserver 127.0.0.1:8000 > >(sed 's/^/[BACKEND] /') 2>&1 &
+python manage.py runserver https://complaint-system-be-production.up.railway.app/ > >(sed 's/^/[BACKEND] /') 2>&1 &
 
 # --- Frontend Section ---
 echo "⚛️ Booting Frontend..."
