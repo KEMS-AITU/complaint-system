@@ -58,9 +58,9 @@ export const AppLayout = () => {
               <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
                 <span className={token ? 'pill pill-good' : 'pill pill-warn'}>
                   {token
-                    ? displayIdentifier
+                    ? (displayIdentifier
                       ? `${t('session.signedInAs')} ${displayIdentifier}`
-                      : t('session.signedIn')
+                      : t('session.signedIn'))
                     : t('session.signedOut')}
                 </span>
               </div>
