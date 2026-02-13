@@ -1,60 +1,41 @@
 #!/usr/bin/env bash
 
+# Exit immediately if a command fails
 set -e
 
-# ----------------------------
-# Backend setup
-# ----------------------------
-echo "=== Backend: setting up virtual environment ==="
+# Function to kill all processes started by this script
+cleanup() {
+    echo -e "\n🛑 Shutting down servers..."
+    # Kill all background jobs started in this session
+    kill $(jobs -p) 2>/dev/null || true
+    exit 0
+}
 
-if [ ! -d "venv" ]; then
-    python3 -m venv venv
-fi
+# Trap interrupt signals (Ctrl+C)
+trap cleanup INT TERM
 
+# --- Backend Section ---
+echo "🐍 Booting Backend..."
+# Check if we are in the right folder (adjust as needed)
+python3 -m venv venv --quiet
 source venv/bin/activate
+pip install -r requirements.txt --quiet
 
-echo "=== Backend: upgrading pip ==="
-python3 -m pip install --upgrade pip
+python manage.py migrate
+# Use 0.0.0.0 to match your production binding style
+python manage.py runserver 127.0.0.1:8000 > >(sed 's/^/[BACKEND] /') 2>&1 &
 
-if [ -f requirements.txt ]; then
-    echo "=== Backend: installing dependencies from requirements.txt ==="
-    pip install -r requirements.txt
+# --- Frontend Section ---
+echo "⚛️ Booting Frontend..."
+# Using -d check to ensure the folder exists before cd
+if [ -d "../frontend" ]; then
+    cd ../frontend
+    npm install --silent
+    npm run dev > >(sed 's/^/[FRONTEND] /') 2>&1 &
 else
-    echo "=== Backend: installing default dependencies ==="
-    pip install django djangorestframework django-cors-headers
-    pip freeze > requirements.txt
+    echo "❌ Frontend folder not found at ../frontend"
+    cleanup
 fi
 
-echo "=== Backend: applying migrations ==="
-python manage.py migrate
-
-# ----------------------------
-# Start backend in background
-# ----------------------------
-echo "=== Backend: starting server on http://127.0.0.1:8000 ==="
-python manage.py runserver > >(sed 's/^/[BACKEND] /') 2>&1 &
-
-BACKEND_PID=$!
-
-# ----------------------------
-# Frontend setup
-# ----------------------------
-echo "=== Frontend: installing dependencies ==="
-cd ../frontend
-npm install
-
-echo "=== Frontend: starting dev server on http://localhost:5173 ==="
-npm run dev > >(sed 's/^/[FRONTEND] /') 2>&1 &
-
-FRONTEND_PID=$!
-
-# ----------------------------
-# Wait for both processes
-# ----------------------------
-echo "=== Both servers are running. Press Ctrl+C to stop ==="
-
-# Trap Ctrl+C to kill both servers
-trap "echo 'Stopping servers...'; kill $BACKEND_PID $FRONTEND_PID; exit 0" INT
-
-wait $BACKEND_PID $FRONTEND_PID
-
+echo "🚀 System is live! Backend: :8000 | Frontend: :5173"
+wait
