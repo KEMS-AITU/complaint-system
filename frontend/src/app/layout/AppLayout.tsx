@@ -4,7 +4,7 @@ import { useTranslation } from '../../shared/lang/translations';
 import { TopBar } from '../../shared/layout/TopBar';
 
 export const AppLayout = () => {
-  const { token, isAdmin, userIdentifier, userName, userEmail, userId } = useAuth();
+  const { token, isAdmin } = useAuth();
   const { t } = useTranslation();
 
 
