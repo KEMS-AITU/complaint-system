@@ -319,27 +319,50 @@ p {
 }
 
 .topbar-lang {
+  position: relative;
   display: inline-flex;
   gap: 6px;
   padding: 4px;
   border-radius: 999px;
   background: var(--surface);
   border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.topbar-lang-thumb {
+  position: absolute;
+  inset: 3px;
+  width: calc(50% - 4px);
+  border-radius: 999px;
+  background: var(--accent-10);
+  box-shadow: 0 0 0 1px rgba(0, 111, 255, 0.35);
+  transition: transform 0.22s ease-out, box-shadow 0.22s ease-out;
+  will-change: transform;
+}
+
+.topbar-lang-thumb-en {
+  transform: translateX(0);
+}
+
+.topbar-lang-thumb-ru {
+  transform: translateX(100%);
 }
 
 .topbar-pill {
+  position: relative;
+  z-index: 1;
   border: none;
   background: transparent;
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--ink-soft);
   cursor: pointer;
+  transition: color 0.18s ease;
 }
 
 .topbar-pill-active {
-  background: var(--accent-10);
   color: var(--accent);
 }
 
@@ -353,11 +376,41 @@ p {
   place-items: center;
   cursor: pointer;
   color: var(--ink);
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    transform 0.18s ease,
+    color 0.22s ease;
 }
 
 .icon-button svg {
   width: 18px;
   height: 18px;
+  transition:
+    transform 0.32s ease,
+    opacity 0.18s ease;
+}
+
+.icon-button:active {
+  transform: scale(0.96);
+}
+
+.theme-toggle-light {
+  background: var(--surface-strong);
+}
+
+.theme-toggle-dark {
+  background: #020617;
+  border-color: rgba(148, 163, 184, 0.7);
+  color: #e5e7eb;
+}
+
+.theme-toggle-light svg {
+  transform: rotate(0deg);
+}
+
+.theme-toggle-dark svg {
+  transform: rotate(180deg);
 }
 
 .user-menu {

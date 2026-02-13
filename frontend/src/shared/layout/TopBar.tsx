@@ -39,6 +39,12 @@ export const TopBar = () => {
       </div>
       <div className="header-right">
         <div className="topbar-lang">
+          <div
+            className={`topbar-lang-thumb${
+              language === 'ru' ? ' topbar-lang-thumb-ru' : ' topbar-lang-thumb-en'
+            }`}
+            aria-hidden="true"
+          />
           <button
             type="button"
             className={`topbar-pill${language === 'en' ? ' topbar-pill-active' : ''}`}
@@ -54,7 +60,14 @@ export const TopBar = () => {
             RU
           </button>
         </div>
-        <button type="button" className="icon-button" aria-label="Toggle theme" onClick={toggleTheme}>
+        <button
+          type="button"
+          className={`icon-button theme-toggle${
+            isDarkTheme ? ' theme-toggle-dark' : ' theme-toggle-light'
+          }`}
+          aria-label="Toggle theme"
+          onClick={toggleTheme}
+        >
           {isDarkTheme ? (
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path
