@@ -1,11 +1,10 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '../../shared/auth/AuthContext';
-import { Button } from '../../shared/ui/Button';
 import { useTranslation } from '../../shared/lang/translations';
 import { TopBar } from '../../shared/layout/TopBar';
 
 export const AppLayout = () => {
-  const { token, isAdmin, userIdentifier, userName, userEmail, userId, clearToken } = useAuth();
+  const { token, isAdmin, userIdentifier, userName, userEmail, userId } = useAuth();
   const { t } = useTranslation();
 
   const displayIdentifier = userName || userEmail || userIdentifier || userId;
@@ -65,11 +64,7 @@ export const AppLayout = () => {
                     : t('session.signedOut')}
                 </span>
               </div>
-              {token ? (
-                <Button variant="ghost" onClick={clearToken}>
-                  {t('session.switchAccount')}
-                </Button>
-              ) : (
+              {!token ? (
                 <p className="panel-note">{t('session.note')}</p>
               )}
             </div>

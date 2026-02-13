@@ -20,9 +20,9 @@ const en: Messages = {
   'session.switchAccount': 'Switch account',
   'session.note': 'Sign in to access your complaint tools.',
 
-  'home.hero.title': 'Welcome to Complaint Hub',
+  'home.hero.title': "Have an issue? Let's make a complaint.",
   'home.hero.description':
-    'A simple place to create a complaint, check its status, and share feedback.',
+    'Submit your case in minutes, follow each status update, and keep everything in one place.',
   'home.section.getStarted.title': 'Get started',
   'home.section.getStarted.item1': 'Create an account or sign in to continue.',
   'home.section.getStarted.item2': 'Submit your complaint in just a few steps.',
