@@ -4,10 +4,9 @@ import { useTranslation } from '../../shared/lang/translations';
 import { TopBar } from '../../shared/layout/TopBar';
 
 export const AppLayout = () => {
-  const { token, isAdmin, userIdentifier, userName, userEmail, userId } = useAuth();
+  const { token, isAdmin } = useAuth();
   const { t } = useTranslation();
 
-  const displayIdentifier = userName || userEmail || userIdentifier || userId;
 
   const navItems = token
     ? [
@@ -53,21 +52,6 @@ export const AppLayout = () => {
                 </NavLink>
               ))}
             </nav>
-            <div className="token-panel">
-                <p className="panel-label">{t('session.label')}</p>
-                <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                  <span className={token ? 'pill pill-good' : 'pill pill-warn'}>
-                  {token
-                    ? (displayIdentifier 
-                      ? `${t('session.signedInAs')} ${displayIdentifier}`
-                      : t('session.signedIn')) 
-              : t('session.signedOut')}
-            </span>
-        </div>
-        {!token && ( // Используем && вместо тернарника для чистоты
-        <p className="panel-note">{t('session.note')}</p>
-    )}
-</div>
           </aside>
           <main className="content">
             <div className="content-inner">

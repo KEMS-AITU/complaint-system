@@ -6,23 +6,10 @@ import { Button } from '../../shared/ui/Button';
 import { Field } from '../../shared/ui/Field';
 import { Input } from '../../shared/ui/Input';
 import { Notice } from '../../shared/ui/Notice';
-
-const validatePassword = (value: string) => {
-  if (!value) return 'Password is required.';
-  if (value.length < 8) return 'Password must be at least 8 characters.';
-  if (!/[A-Za-z]/.test(value) || !/[0-9]/.test(value)) {
-    return 'Password must include at least one letter and one number.';
-  }
-  return '';
-};
-
-const validateConfirmPassword = (password: string, confirm: string) => {
-  if (!confirm) return 'Confirm your password.';
-  if (password !== confirm) return 'Passwords do not match.';
-  return '';
-};
+import { useTranslation } from '../../shared/lang/translations';
 
 export const ResetPasswordPage = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token')?.trim() ?? '';
 
@@ -36,17 +23,29 @@ export const ResetPasswordPage = () => {
 
   if (!token) {
     return (
-      <AuthCard title="Invalid or expired link.">
-        <p className="muted">Please request a new password reset email.</p>
+      <AuthCard title={t('auth.reset.invalid.title')}>
+        <p className="muted">{t('auth.reset.invalid.body')}</p>
         <Link className="btn btn-primary" to="/forgot-password">
-          Request a new link
+          {t('auth.reset.invalid.cta')}
         </Link>
       </AuthCard>
     );
   }
 
-  const passwordError = validatePassword(password);
-  const confirmPasswordError = validateConfirmPassword(password, confirmPassword);
+  const passwordError = (() => {
+    if (!password) return t('auth.reset.password.error.required');
+    if (password.length < 8) return t('auth.reset.password.error.length');
+    if (!/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
+      return t('auth.reset.password.error.complexity');
+    }
+    return '';
+  })();
+
+  const confirmPasswordError = (() => {
+    if (!confirmPassword) return t('auth.reset.confirmPassword.error.required');
+    if (password !== confirmPassword) return t('auth.reset.confirmPassword.error.mismatch');
+    return '';
+  })();
   const canSubmit = !passwordError && !confirmPasswordError;
   const isLoading = status === 'loading';
 
@@ -65,15 +64,15 @@ export const ResetPasswordPage = () => {
     }
 
     setStatus('idle');
-    setFormError('Unable to reset password. Please try again.');
+    setFormError(t('auth.reset.error.generic'));
   };
 
   if (status === 'success') {
     return (
-      <AuthCard title="Password updated">
-        <p className="muted">Your password has been updated. You can sign in now.</p>
+      <AuthCard title={t('auth.reset.success.title')}>
+        <p className="muted">{t('auth.reset.success.body')}</p>
         <Link className="btn btn-primary" to="/login">
-          Back to sign in
+          {t('auth.reset.success.back')}
         </Link>
       </AuthCard>
     );
@@ -81,11 +80,11 @@ export const ResetPasswordPage = () => {
 
   return (
     <AuthCard
-      title="Set a new password"
-      subtitle="Choose a strong password you haven't used before"
+      title={t('auth.reset.title')}
+      subtitle={t('auth.reset.subtitle')}
     >
       <form onSubmit={handleSubmit} className="form" noValidate>
-        <Field label="New password">
+        <Field label={t('auth.reset.password.label')}>
           <>
             <div className="input-row">
               <Input
@@ -101,10 +100,14 @@ export const ResetPasswordPage = () => {
                 type="button"
                 className="toggle-button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-label={
+                  showPassword
+                    ? t('auth.reset.toggle.aria.hide')
+                    : t('auth.reset.toggle.aria.show')
+                }
                 disabled={isLoading}
               >
-                {showPassword ? 'Hide' : 'Show'}
+                {showPassword ? t('auth.reset.toggle.hide') : t('auth.reset.toggle.show')}
               </button>
             </div>
             {touched.password && passwordError ? (
@@ -114,7 +117,7 @@ export const ResetPasswordPage = () => {
             ) : null}
           </>
         </Field>
-        <Field label="Confirm new password">
+        <Field label={t('auth.reset.confirmPassword.label')}>
           <>
             <div className="input-row">
               <Input
@@ -134,10 +137,14 @@ export const ResetPasswordPage = () => {
                 type="button"
                 className="toggle-button"
                 onClick={() => setShowConfirmPassword((prev) => !prev)}
-                aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                aria-label={
+                  showConfirmPassword
+                    ? t('auth.reset.toggle.aria.hide')
+                    : t('auth.reset.toggle.aria.show')
+                }
                 disabled={isLoading}
               >
-                {showConfirmPassword ? 'Hide' : 'Show'}
+                {showConfirmPassword ? t('auth.reset.toggle.hide') : t('auth.reset.toggle.show')}
               </button>
             </div>
             {touched.confirmPassword && confirmPasswordError ? (
@@ -148,7 +155,7 @@ export const ResetPasswordPage = () => {
           </>
         </Field>
         <Button type="submit" disabled={!canSubmit || isLoading}>
-          {isLoading ? 'Updating...' : 'Update password'}
+          {isLoading ? t('auth.reset.submit.loading') : t('auth.reset.submit.idle')}
         </Button>
         {formError ? <Notice tone="warning">{formError}</Notice> : null}
       </form>
