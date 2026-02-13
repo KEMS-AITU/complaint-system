@@ -30,7 +30,7 @@ ALLOWED_HOSTS = [
 ]
 
 # Настройка CORS
-CORS_ALLOW_ALL_ORIGINS = False # Выключаем полный доступ
+CORS_ALLOW_ALL_ORIGINS = True # Выключаем полный доступ
 
 CORS_ALLOWED_ORIGINS = [
     "https://complaint-system-ewe4.vercel.app", # Твой фронтенд
