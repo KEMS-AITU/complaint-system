@@ -7,7 +7,6 @@ export const AppLayout = () => {
   const { token, isAdmin, userIdentifier, userName, userEmail, userId } = useAuth();
   const { t } = useTranslation();
 
-  const displayIdentifier = userName || userEmail || userIdentifier || userId;
 
   const navItems = token
     ? [
