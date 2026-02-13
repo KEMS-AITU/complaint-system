@@ -4,6 +4,7 @@ import { useAuth } from '../auth/AuthContext';
 import { useLanguage } from '../lang/LanguageContext';
 import { useTheme } from '../theme/ThemeContext';
 import logo from '../../assets/Leeft.svg';
+import darkLogo from '../../assets/dark_logo.png';
 
 const getInitials = (value: string) => {
   const trimmed = value.trim();
@@ -23,12 +24,13 @@ export const TopBar = () => {
   const displayName = userName || userEmail || userIdentifier || userId || (token ? 'Signed in' : 'Guest');
   const initials = useMemo(() => getInitials(displayName), [displayName]);
   const isDarkTheme = theme === 'dark';
+  const activeLogo = isDarkTheme ? darkLogo : logo;
 
   return (
     <header className="dashboard-header">
       <div className="header-left">
         <Link to="/" className="header-logo-link" aria-label="Home">
-          <img src={logo} alt="SEMKi logo" className="header-logo" />
+          <img src={activeLogo} alt="SEMKi logo" className="header-logo" />
         </Link>
         <div className="header-title">
           <div className="topbar-title">SEMKi</div>
