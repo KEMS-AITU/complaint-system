@@ -13,7 +13,8 @@ django-cors-headers==4.9.0
 # Утилиты
 python-dotenv==1.1.1
 requests==2.32.3
-pillow==11.3.0  # Для обработки загруженных фото
+pillow==11.3.0  
 
-# Firebase (если используете для уведомлений или входа)
+# Firebase 
 firebase-admin==6.8.0
+
