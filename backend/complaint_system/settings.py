@@ -24,20 +24,20 @@ SECRET_KEY = 'django-insecure-eb75&vn8zlxp7mna84gwm_)ka#t9q5oug*t!nxfpopg4fu@89p
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'complaint-system-be-production.up.railway.app', # Твой домен Railway
+    'complaint-system-be-production.up.railway.app', 
     'localhost', 
     '127.0.0.1'
 ]
 
-# Настройка CORS
-CORS_ALLOW_ALL_ORIGINS = True # Выключаем полный доступ
+
+CORS_ALLOW_ALL_ORIGINS = True 
 
 CORS_ALLOWED_ORIGINS = [
-    "https://complaint-system-ewe4.vercel.app", # Твой фронтенд
-    "http://localhost:5173",                   # Для локальной разработки
+    "https://complaint-system-ewe4.vercel.app", 
+    "http://localhost:5173",                   
 ]
 
-# Дополнительно разрешаем передачу куки/токенов через CORS
+
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "https://complaint-system-ewe4.vercel.app",
@@ -92,12 +92,12 @@ db_url = os.getenv('DATABASE_URL')
 
 db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
 if db_from_env:
-    # Если мы на Railway и переменная DATABASE_URL подтянулась
+    
     DATABASES = {
         'default': db_from_env
     }
 else:
-    # Если переменной нет (локальная разработка)
+    
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -138,7 +138,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# user
+
 AUTH_USER_MODEL = 'feedback.User'
 
 
