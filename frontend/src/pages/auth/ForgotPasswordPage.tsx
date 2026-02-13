@@ -6,29 +6,31 @@ import { Button } from '../../shared/ui/Button';
 import { Field } from '../../shared/ui/Field';
 import { Input } from '../../shared/ui/Input';
 import { Notice } from '../../shared/ui/Notice';
+import { useTranslation } from '../../shared/lang/translations';
 
 const ALLOWED_EMAIL_DOMAINS = ['astanait.edu.kz'];
 
 const normalizeEmail = (value: string) => value.trim().toLowerCase();
 
-const validateUniversityEmail = (value: string) => {
-  const email = normalizeEmail(value);
-  if (!email) return 'Email is required.';
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return 'Enter a valid email.';
-  const domain = email.split('@')[1];
-  if (!ALLOWED_EMAIL_DOMAINS.includes(domain)) {
-    return `Use your university email (e.g., name@${ALLOWED_EMAIL_DOMAINS[0]}).`;
-  }
-  return '';
-};
-
 export const ForgotPasswordPage = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
   const [formError, setFormError] = useState('');
   const [touched, setTouched] = useState(false);
 
-  const emailError = validateUniversityEmail(email);
+  const emailError = (() => {
+    const normalized = normalizeEmail(email);
+    if (!normalized) return t('auth.forgot.email.error.required');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(normalized)) {
+      return t('auth.forgot.email.error.invalid');
+    }
+    const domain = normalized.split('@')[1];
+    if (!ALLOWED_EMAIL_DOMAINS.includes(domain)) {
+      return t('auth.forgot.email.error.domain');
+    }
+    return '';
+  })();
   const canSubmit = !emailError;
   const isLoading = status === 'loading';
 
@@ -47,17 +49,15 @@ export const ForgotPasswordPage = () => {
     }
 
     setStatus('idle');
-    setFormError('Unable to send reset email. Please try again.');
+    setFormError(t('auth.forgot.error.generic'));
   };
 
   if (status === 'success') {
     return (
-      <AuthCard title="Check your email">
-        <p className="muted">
-          If an account exists for that email, we sent a password reset link.
-        </p>
+      <AuthCard title={t('auth.forgot.success.title')}>
+        <p className="muted">{t('auth.forgot.success.body')}</p>
         <Link className="btn btn-primary" to="/login">
-          Back to sign in
+          {t('auth.forgot.success.back')}
         </Link>
       </AuthCard>
     );
@@ -65,11 +65,11 @@ export const ForgotPasswordPage = () => {
 
   return (
     <AuthCard
-      title="Forgot your password?"
-      subtitle="Enter your email and well send a reset link"
+      title={t('auth.forgot.title')}
+      subtitle={t('auth.forgot.subtitle')}
     >
       <form onSubmit={handleSubmit} className="form" noValidate>
-        <Field label="Email">
+        <Field label={t('auth.forgot.email.label')}>
           <>
             <Input
               type="email"
@@ -88,11 +88,12 @@ export const ForgotPasswordPage = () => {
           </>
         </Field>
         <Button type="submit" disabled={!canSubmit || isLoading}>
-          {isLoading ? 'Sending...' : 'Send reset link'}
+          {isLoading ? t('auth.forgot.submit.loading') : t('auth.forgot.submit.idle')}
         </Button>
         {formError ? <Notice tone="warning">{formError}</Notice> : null}
         <p className="muted">
-          Remembered your password? <Link to="/login">Sign in</Link>
+          {t('auth.forgot.footer.remembered')}{' '}
+          <Link to="/login">{t('auth.forgot.footer.link')}</Link>
         </p>
       </form>
     </AuthCard>

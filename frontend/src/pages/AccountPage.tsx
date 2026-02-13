@@ -83,11 +83,11 @@ export const AccountPage = () => {
     if (!token) return;
     setValidationError('');
     if (!formState.first_name.trim() || !formState.last_name.trim()) {
-      setValidationError('First name and last name are required.');
+      setValidationError(t('account.validation.nameRequired'));
       return;
     }
     if (formState.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email)) {
-      setValidationError('Enter a valid email address.');
+      setValidationError(t('account.validation.emailInvalid'));
       return;
     }
     setStatus('saving');
@@ -133,12 +133,12 @@ export const AccountPage = () => {
     setAvatarError('');
     const isValidType = ['image/png', 'image/jpeg', 'image/jpg'].includes(file.type);
     if (!isValidType) {
-      setAvatarError('Only PNG or JPG images are allowed.');
+      setAvatarError(t('account.avatar.error.type'));
       return;
     }
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
-      setAvatarError('Image must be 5MB or smaller.');
+      setAvatarError(t('account.avatar.error.size'));
       return;
     }
     if (avatarPreview) URL.revokeObjectURL(avatarPreview);
@@ -223,15 +223,15 @@ export const AccountPage = () => {
             {pendingAvatarFile ? (
               <div className="profile-action-group">
                 <Button type="button" variant="secondary" onClick={handleAvatarCancel}>
-                  Cancel
+                  {t('common.cancel')}
                 </Button>
                 <Button type="button" onClick={handleAvatarSave} disabled={isBusy}>
-                  {status === 'uploading' ? t('account.avatar.uploading') : 'Save changes'}
+                  {status === 'uploading' ? t('account.avatar.uploading') : t('account.save.idle')}
                 </Button>
               </div>
             ) : (
               <Button type="button" variant="secondary" className="btn-accent">
-                Change history
+                {t('account.avatar.changeHistory')}
               </Button>
             )}
           </div>
@@ -243,12 +243,14 @@ export const AccountPage = () => {
             <div className="details-head">
               <div>
                 <h3>
-                  {activeSection === 'basic' ? 'Basic information' : 'Account settings'}
+                  {activeSection === 'basic'
+                    ? t('account.section.basic.title')
+                    : t('account.section.settings.title')}
                 </h3>
                 <p className="muted">
                   {activeSection === 'basic'
-                    ? 'Update your personal details and contact information.'
-                    : 'Manage your account identifiers and role.'}
+                    ? t('account.section.basic.description')
+                    : t('account.section.settings.description')}
                 </p>
               </div>
               {activeSection === 'basic' ? (
@@ -268,7 +270,7 @@ export const AccountPage = () => {
                       setSuccess('');
                       setIsEditing(false);
                     }}>
-                      Cancel
+                      {t('common.cancel')}
                     </Button>
                     <Button type="button" onClick={handleSave} disabled={isBusy}>
                       {status === 'saving' ? t('account.save.saving') : t('account.save.idle')}
@@ -281,7 +283,7 @@ export const AccountPage = () => {
                     className="btn-accent"
                     onClick={() => setIsEditing(true)}
                   >
-                    Edit
+                    {t('common.edit')}
                   </Button>
                 )
               ) : null}
@@ -350,7 +352,7 @@ export const AccountPage = () => {
                   <span className="details-value">{formState.username || '-'}</span>
                 </div>
                 <div>
-                  <span className="details-label">Role</span>
+                  <span className="details-label">{t('account.label.role')}</span>
                   <span className="details-value">{roleLabel}</span>
                 </div>
                 <div>
@@ -368,7 +370,7 @@ export const AccountPage = () => {
               onClick={() => setActiveSection('basic')}
             >
               <span className="side-nav-icon" aria-hidden="true" />
-              Basic information
+              {t('account.nav.basic')}
             </button>
             <button
               type="button"
@@ -376,7 +378,7 @@ export const AccountPage = () => {
               onClick={() => setActiveSection('settings')}
             >
               <span className="side-nav-icon" aria-hidden="true" />
-              Account settings
+              {t('account.nav.settings')}
             </button>
           </Card>
         </div>
