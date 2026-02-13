@@ -10,6 +10,7 @@ import { Input } from '../shared/ui/Input';
 import { Notice } from '../shared/ui/Notice';
 import { Section } from '../shared/ui/Section';
 import { Select } from '../shared/ui/Select';
+import { useTranslation } from '../shared/lang/translations';
 
 type ComplaintStatus = 'Submitted' | 'In review' | 'Resolved' | 'Accepted' | 'Rejected' | 'Draft' | string;
 
@@ -21,17 +22,6 @@ interface Complaint {
   status: ComplaintStatus;
   title?: string;
 }
-
-const STATUS_OPTIONS = [
-  { value: 'All', label: 'All' },
-  { value: 'Submitted', label: 'Submitted' },
-  { value: 'In review', label: 'In review' },
-  { value: 'In progress', label: 'In progress' },
-  { value: 'Resolved', label: 'Resolved' },
-  { value: 'Accepted', label: 'Accepted' },
-  { value: 'Closed', label: 'Closed' },
-  { value: 'Rejected', label: 'Rejected' },
-];
 
 const toStatusLabel = (status: string) => {
   switch (status) {
@@ -89,12 +79,49 @@ const getStatusBadgeStyle = (status: string) => {
 
 export const MyComplaintsPage = () => {
   const { token, isAdmin } = useAuth();
+  const { t, language } = useTranslation();
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const highlightId = searchParams.get('highlight');
   const created = (location.state as { created?: boolean } | undefined)?.created;
   const flashMessage = (location.state as { flash?: string } | undefined)?.flash ?? '';
-  const successMessage = created ? 'Complaint submitted successfully.' : flashMessage;
+  const successMessage = created ? t('create.flash.success') : flashMessage;
+  const statusOptions = [
+    { value: 'All', label: t('my.status.all') },
+    { value: 'Submitted', label: t('my.status.submitted') },
+    { value: 'In review', label: t('my.status.inReview') },
+    { value: 'In progress', label: t('my.status.inProgress') },
+    { value: 'Resolved', label: t('my.status.resolved') },
+    { value: 'Accepted', label: t('my.status.accepted') },
+    { value: 'Closed', label: t('my.status.closed') },
+    { value: 'Rejected', label: t('my.status.rejected') },
+  ];
+
+  const getStatusLabel = (value: string) => {
+    switch (value) {
+      case 'Submitted':
+        return t('my.status.submitted');
+      case 'In review':
+        return t('my.status.inReview');
+      case 'In progress':
+        return t('my.status.inProgress');
+      case 'Resolved':
+        return t('my.status.resolved');
+      case 'Accepted':
+        return t('my.status.accepted');
+      case 'Closed':
+        return t('my.status.closed');
+      case 'Rejected':
+        return t('my.status.rejected');
+      case 'Draft':
+        return t('my.status.draft');
+      default:
+        return value;
+    }
+  };
+
+  const formatDate = (value: string) =>
+    new Date(value).toLocaleDateString(language === 'ru' ? 'ru-RU' : 'en-US');
 
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('All');
@@ -112,9 +139,9 @@ export const MyComplaintsPage = () => {
 
     if (!result.ok) {
       if (result.status === 401 || result.status === 403) {
-        setError('You need to sign in again.');
+        setError(t('create.error.signInAgain'));
       } else {
-        setError('Unable to load complaints. Please try again.');
+        setError(t('my.error.load'));
       }
       setLoading(false);
       return;
@@ -142,7 +169,7 @@ export const MyComplaintsPage = () => {
           return false;
         }
         if (!term) return true;
-        const categoryValue = (complaint.category ?? 'general').toLowerCase();
+        const categoryValue = (complaint.category ?? t('my.category.general')).toLowerCase();
         const titleValue = (complaint.title ?? '').toLowerCase();
         return (
           complaint.id.toString().toLowerCase().includes(term) ||
@@ -151,7 +178,7 @@ export const MyComplaintsPage = () => {
         );
       })
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  }, [complaints, search, status]);
+  }, [complaints, search, status, t]);
 
   const handleClear = () => {
     setSearch('');
@@ -164,21 +191,21 @@ export const MyComplaintsPage = () => {
 
   return (
     <div className="stack">
-      <Section title="My complaints" description="Track the status of your submitted complaints.">
+      <Section title={t('my.page.title')} description={t('my.page.description')}>
         <div className="stack">
           {successMessage ? <Notice tone="success">{successMessage}</Notice> : null}
           <Card>
             <div className="filters">
-              <Field label="Search">
+              <Field label={t('my.filters.search.label')}>
                 <Input
-                  placeholder="Search by ID, category, or text"
+                  placeholder={t('my.filters.search.placeholder')}
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                 />
               </Field>
-              <Field label="Status">
+              <Field label={t('my.filters.status.label')}>
                 <Select value={status} onChange={(event) => setStatus(event.target.value)}>
-                  {STATUS_OPTIONS.map((option) => (
+                  {statusOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -187,7 +214,7 @@ export const MyComplaintsPage = () => {
               </Field>
               <div className="filters-actions">
                 <Button type="button" variant="secondary" onClick={handleClear}>
-                  Clear filters
+                  {t('my.filters.clear')}
                 </Button>
               </div>
             </div>
@@ -197,23 +224,23 @@ export const MyComplaintsPage = () => {
 
           {isEmpty ? (
             <Card>
-              <h3>No complaints yet</h3>
-              <p className="muted">Create your first complaint to start tracking it here.</p>
+              <h3>{t('my.empty.title')}</h3>
+              <p className="muted">{t('my.empty.description')}</p>
               {!isAdmin ? (
                 <Link className="btn btn-primary" to="/create">
-                  Create complaint
+                  {t('my.empty.cta')}
                 </Link>
               ) : null}
             </Card>
           ) : null}
 
           {hasNoResults ? (
-            <Notice tone="info">No complaints match your filters.</Notice>
+            <Notice tone="info">{t('my.empty.filtered')}</Notice>
           ) : null}
 
           {loading && complaints.length === 0 ? (
             <Card>
-              <Notice tone="info">Loading complaints...</Notice>
+              <Notice tone="info">{t('my.loading')}</Notice>
             </Card>
           ) : null}
 
@@ -224,10 +251,10 @@ export const MyComplaintsPage = () => {
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Created</th>
-                      <th>Category</th>
-                      <th>Status</th>
-                      <th>Last update</th>
+                      <th>{t('my.table.created')}</th>
+                      <th>{t('my.table.category')}</th>
+                      <th>{t('my.table.status')}</th>
+                      <th>{t('my.table.lastUpdate')}</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -246,22 +273,22 @@ export const MyComplaintsPage = () => {
                             #{complaint.id}
                           </Link>
                         </td>
-                        <td>{new Date(complaint.createdAt).toLocaleDateString()}</td>
-                        <td>{complaint.category ?? 'General'}</td>
+                        <td>{formatDate(complaint.createdAt)}</td>
+                        <td>{complaint.category ?? t('my.category.general')}</td>
                         <td>
                           <span
                             className="status-pill"
                             style={getStatusBadgeStyle(complaint.status)}
                           >
-                            {complaint.status}
+                            {getStatusLabel(complaint.status)}
                           </span>
                         </td>
                         <td>
-                          {new Date(complaint.updatedAt ?? complaint.createdAt).toLocaleDateString()}
+                          {formatDate(complaint.updatedAt ?? complaint.createdAt)}
                         </td>
                         <td className="table-actions">
                           <Link className="btn btn-secondary btn-sm" to={`/complaints/${complaint.id}`}>
-                            View
+                            {t('my.table.view')}
                           </Link>
                         </td>
                       </tr>
@@ -276,7 +303,7 @@ export const MyComplaintsPage = () => {
                   disabled={loading}
                   onClick={() => fetchComplaints(page + 1, false)}
                 >
-                  {loading ? 'Loading...' : 'Load more'}
+                  {loading ? t('my.loading') : t('my.loadMore')}
                 </Button>
               ) : null}
             </Card>
