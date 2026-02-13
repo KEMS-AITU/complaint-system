@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-eb75&vn8zlxp7mna84gwm_)ka#t9q5oug*t!nxfpopg4fu@89p
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'https://complaint-system-be-production.up.railway.app', # Твой домен Railway
+    'complaint-system-be-production.up.railway.app', # Твой домен Railway
     'localhost', 
     '127.0.0.1'
 ]
