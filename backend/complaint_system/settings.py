@@ -23,14 +23,22 @@ SECRET_KEY = 'django-insecure-eb75&vn8zlxp7mna84gwm_)ka#t9q5oug*t!nxfpopg4fu@89p
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
-
-CORS_ALLOW_ALL_ORIGINS = True
-
-CORS_ALLOWED_ORIGINS = [
-    "https://complaint-system-ewe4.vercel.app",
+ALLOWED_HOSTS = [
+    'https://complaint-system-be-production.up.railway.app/', # Твой домен Railway
+    'localhost', 
+    '127.0.0.1'
 ]
 
+# Настройка CORS
+CORS_ALLOW_ALL_ORIGINS = False # Выключаем полный доступ
+
+CORS_ALLOWED_ORIGINS = [
+    "https://complaint-system-ewe4.vercel.app", # Твой фронтенд
+    "http://localhost:5173",                   # Для локальной разработки
+]
+
+# Дополнительно разрешаем передачу куки/токенов через CORS
+CORS_ALLOW_CREDENTIALS = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
