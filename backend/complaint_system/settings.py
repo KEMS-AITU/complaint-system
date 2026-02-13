@@ -39,7 +39,10 @@ CORS_ALLOWED_ORIGINS = [
 
 # Дополнительно разрешаем передачу куки/токенов через CORS
 CORS_ALLOW_CREDENTIALS = True
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://complaint-system-ewe4.vercel.app",
+    "https://complaint-system-be-production.up.railway.app"
+]
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
